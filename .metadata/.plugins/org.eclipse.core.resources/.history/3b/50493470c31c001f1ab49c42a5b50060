@@ -1,0 +1,39 @@
+package project1;
+
+import java.awt.Image;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
+import javax.swing.JPanel;
+
+import lombok.Data;
+
+// 설정
+// 프로필(사진, 이름)
+// 테마
+// 이모티콘
+// 글꼴
+@Data
+public class SettingPanel extends JPanel implements ActionListener{
+
+	private Image backgroundImage;
+	private JPanel backgroundJPanel;
+	
+	private JPanel profileJPanel;
+	
+	
+	
+	public SettingPanel(ClientService clientService) {
+		
+	}
+
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+	
+	
+	
+	
+}

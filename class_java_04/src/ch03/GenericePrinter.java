@@ -1,0 +1,25 @@
+package ch03;
+
+/**
+ * 
+ * @param <T> Material Material 를 상속밭은 자식 클래스만 대체 문자에 들어올 수 있다
+ */
+
+public class GenericePrinter<T extends Material> {
+
+	private T material;
+
+	public T getMaterial() {
+		return material;
+	}
+
+	public void setMaterial(T material) {
+		this.material = material;
+	}
+
+	@Override
+	public String toString() {
+		return material.toString();
+	}
+
+}

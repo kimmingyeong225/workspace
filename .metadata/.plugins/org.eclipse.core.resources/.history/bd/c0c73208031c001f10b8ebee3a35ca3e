@@ -1,0 +1,168 @@
+package project1;
+
+import java.io.FileNotFoundException;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.net.ProtocolFamily;
+import java.net.ServerSocket;
+import java.net.Socket;
+import java.util.Vector;
+
+import javax.swing.ImageIcon;
+import javax.swing.JOptionPane;
+import javax.swing.JTextArea;
+
+public class Server {
+
+	// 접속된 유저 벡터
+	private Vector<ConnectUser> connectUsers = new Vector<>();
+	// 만들어진 방 벡터
+	private Vector<MyRoom> madeRooms = new Vector<>();
+
+	// 프레임 창
+	private ServerFrame serverFrame;
+
+	private JTextArea mainBoard;
+
+	// 소켓 장치
+	private ServerSocket serverSocket;
+	private Socket socket;
+
+	// 파일 저장을 위한 장치
+	private FileWriter fileWriter;
+
+	// 방 만들기 같은 방 이름 체크
+	private boolean roomCheck;
+
+	private String protocol;
+	private String from;
+	private String message;
+
+	private ImageIcon icon = new ImageIcon("img/");
+
+	public Server() {
+		serverFrame = new ServerFrame(this);
+		roomCheck = true;
+		mainBoard = serverFrame.getMainBoard();
+	}
+
+	public void startServer() {
+		try {
+			// 서버 소켓 장치
+			serverSocket = new ServerSocket(10000);
+			serverViewAppendWriter("[알림] 서버 시작\n");
+			serverFrame.getConnectBtn().setEnabled(false);
+			connectClient();
+
+		} catch (IOException e) {
+			JOptionPane.showMessageDialog(null, "이미 사용중인 포트입니다", "알림", JOptionPane.ERROR_MESSAGE, icon);
+			serverFrame.getConnectBtn().setEnabled(true);
+		}
+	}
+
+	private void connectClient() {
+		new Thread(new Runnable() {
+
+			@Override
+			public void run() {
+				while (true) {
+					try {
+
+						// 속켓 장치
+						socket = serverSocket.accept();
+						serverViewAppendWriter("[알림] 사용자 접속 대기\n");
+						
+						// 연결을 대기 하다가 유저가 들어오면 유저 생성, 소켓으로 유저 구분 가능
+						 ConnectedUser user = new ConnectedUser(socket); 
+						user.start();
+					} catch (Exception e) {
+						// 서버 중지
+						serverViewAppendWriter("[에러] 접속 에러 ! ! \n");
+					}
+				}
+			}
+		}).start();
+	}
+
+	// 전체 접속된 유저에게 출력하는 것
+	private void broadCast(String msg) {
+		for(int i = 0; i < connectUsers.size(); i++) {
+			connectUsers user = connectUsers.elementAt(i);
+			user.writer(msg);
+		}
+	}
+	
+	
+	// 서버로 들어오는 요청은 모두 저장되는 파일 
+	private void serverViewAppendWriter(String str) {
+		try {
+			fileWriter = new FileWriter("talk_log.txt", true);
+			mainBoard.append(str);
+			fileWriter.write(str);
+			fileWriter.flush();
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	private class ConnectedUser extends Thread implements ProtocolImpl{
+
+		@Override
+		public void chatting() {
+			// TODO Auto-generated method stub
+			
+		}
+
+		@Override
+		public void secretMessage() {
+			// TODO Auto-generated method stub
+			
+		}
+
+		@Override
+		public void makeRoom() {
+			// TODO Auto-generated method stub
+			
+		}
+
+		@Override
+		public void madeRoom() {
+			// TODO Auto-generated method stub
+			
+		}
+
+		@Override
+		public void newRoom() {
+			// TODO Auto-generated method stub
+			
+		}
+
+		@Override
+		public void outRoom() {
+			// TODO Auto-generated method stub
+			
+		}
+
+		@Override
+		public void enterRoom() {
+			// TODO Auto-generated method stub
+			
+		}
+
+		@Override
+		public void newUser() {
+			// TODO Auto-generated method stub
+			
+		}
+
+		@Override
+		public void connectedUser() {
+			// TODO Auto-generated method stub
+			
+		}
+		
+	}
+	
+}// end of class

@@ -1,0 +1,32 @@
+package http;
+
+import java.io.IOException;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
+
+public class HttpGetclient2 {
+
+	public static void main(String[] args) {
+		
+		String urlString = "https://m.naver.com/";		
+		
+		try {
+			URL url = new URL(urlString);
+			HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+			conn.setRequestMethod("GET");
+			
+			int responseCode = conn.getResponseCode();
+			System.out.println("HTTP CODE : " + responseCode);
+			
+			
+		} catch (MalformedURLException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		
+		
+	}// end of main
+
+}

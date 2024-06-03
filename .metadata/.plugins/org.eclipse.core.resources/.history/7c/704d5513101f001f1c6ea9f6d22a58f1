@@ -1,0 +1,117 @@
+package project4;
+
+import java.awt.GridLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JPasswordField;
+import javax.swing.JTextField;
+import javax.swing.SwingUtilities;
+
+public class ManagementFrame  extends JFrame{
+
+    private JTextField usernameField;
+    private JPasswordField passwordField;
+    private JButton loginButton;
+    private JButton registerButton;
+    private UserManagement userManagement;
+
+    public ManagementFrame() {
+        userManagement = new UserManagement();
+        setTitle("로그인");
+        setSize(300, 200);
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        initLayout();
+        addEventListeners();
+    }
+
+    private void initLayout() {
+        usernameField = new JTextField();
+        passwordField = new JPasswordField();
+        loginButton = new JButton("로그인");
+        registerButton = new JButton("회원가입");
+
+        setLayout(new GridLayout(4, 1));
+    	JPanel panel = new JPanel();
+		panel.setLayout(null);
+
+		JLabel usernameLabel = new JLabel("Username :");
+		usernameLabel.setBounds(10, 10, 80, 25);
+		panel.add(usernameLabel);
+
+		usernameField = new JTextField(20);
+		usernameField.setBounds(100, 10, 160, 25);
+		panel.add(usernameField);
+
+		JLabel passwordLabel = new JLabel("Password :");
+		passwordLabel.setBounds(10, 40, 80, 25);
+		panel.add(passwordLabel);
+
+		passwordField = new JPasswordField(20);
+		passwordField.setBounds(100, 40, 160, 25);
+		panel.add(passwordField);
+
+		loginButton = new JButton("Login");
+		loginButton.setBounds(10, 150, 250, 25);
+		panel.add(loginButton);
+		
+		registerButton = new JButton("회원가입");
+		registerButton.setBounds(10, 120, 250, 25);
+		panel.add(registerButton);
+
+		add(panel);
+    }
+
+    private void addEventListeners() {
+        loginButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                login();
+            }
+        });
+
+        registerButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                register();
+            }
+        });
+    }
+
+    private void login() {
+        String username = usernameField.getText();
+        String password = new String(passwordField.getPassword());
+        if (userManagement.login(username, password)) {
+            JOptionPane.showMessageDialog(this, "로그인 성공", "성공", JOptionPane.INFORMATION_MESSAGE);
+            // 로그인 성공 후 메인 프레임을 띄우는 코드 추가
+        } else {
+            JOptionPane.showMessageDialog(this, "로그인 실패", "실패", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+
+    private void register() {
+        String username = usernameField.getText();
+        String password = new String(passwordField.getPassword());
+        if (userManagement.register(username, password)) {
+            JOptionPane.showMessageDialog(this, "회원가입 성공", "성공", JOptionPane.INFORMATION_MESSAGE);
+        } else {
+            JOptionPane.showMessageDialog(this, "회원가입 실패: 이미 존재하는 사용자입니다.", "실패", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+
+    public static void main(String[] args) {
+        SwingUtilities.invokeLater(new Runnable() {
+            @Override
+            public void run() {
+                new LoginFrame().setVisible(true);
+            }
+        });
+    }
+
+
+}

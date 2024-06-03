@@ -1,0 +1,60 @@
+package project4;
+
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
+
+public class UserManagement {
+
+    private static final String USER_FILE = "users.txt";
+    private Map<String, String> users;
+
+    public UserManagement() {
+        users = new HashMap<>();
+        loadUsers();
+    }
+
+    private void loadUsers() {
+        try (BufferedReader reader = new BufferedReader(new FileReader(USER_FILE))) {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                String[] parts = line.split(",");
+                if (parts.length == 2) {
+                    users.put(parts[0], parts[1]);
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void saveUsers() {
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(USER_FILE))) {
+            for (Map.Entry<String, String> entry : users.entrySet()) {
+                writer.write(entry.getKey() + "," + entry.getValue());
+                writer.newLine();
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public boolean register(String username, String password) {
+        if (users.containsKey(username)) {
+            return false;
+        }
+        users.put(username, password);
+        saveUsers();
+        return true;
+    }
+
+    public boolean login(String username, String password) {
+        return users.containsKey(username) && users.get(username).equals(password);
+    }
+}
+
+
